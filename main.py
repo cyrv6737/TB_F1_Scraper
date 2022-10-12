@@ -20,6 +20,16 @@ def race_results(year, names) :
         temp_race.results.to_csv(csv_name, sep=',', encoding='utf-8', index=False) # Ensure utf-8 encoding for compat
         i = i + 1
 
+def lap_results(year, names) :
+    i = 0
+    for race_name in names:
+        temp_race = fastf1.get_session(year, race_name, 'R'); temp_race.load()
+        temp_laps = temp_race.laps
+        # format_race_table(temp_race.results)
+        csv_name = 'csv/R' + str(i + 1) + '_Lap_Results.csv'
+        temp_laps.to_csv(csv_name, sep=',', encoding='utf-8', index=False) # Ensure utf-8 encoding for compat
+        i = i + 1
+    
 
 # All race names for this season
 race_names = (
@@ -45,4 +55,4 @@ race_names = (
 
 # Export CSV for all races results
 race_results(2022, race_names)
-
+lap_results(2022, race_names)
