@@ -49,23 +49,6 @@ def lap_results(year, names) :
     df = pd.concat(map(pd.read_csv, results), ignore_index = True)
     df.to_csv('csv/tables/laps.csv', sep=',', encoding='utf-8', index=False)
 
-def format_driver_tables(table) :
-    table.dop(labels = [], axis = 1, inplace = True)
-
-def lap_results_by_driver(year, names, drivers) :
-    i = 0
-    for race_name in names:
-        temp_race = fastf1.get_session(year, race_name, 'R'); temp_race.load()
-        temp_laps = temp_race.laps
-        for abr in drivers:
-            temp_driver = temp_laps.pick_driver(abr)
-            # format_driver_tables(temp_driver)
-            csv_name = 'csv/R' + str(i + 1) + '_Lap_' + abr + '_Results.csv'
-            temp_driver.to_csv(csv_name, sep=',', encoding='utf-8', index=False) # Ensure utf-8 encoding for compat
-        
-        i = i + 1
-
-
 # All race names for this season
 race_names = (
     "FORMULA 1 GULF AIR BAHRAIN GRAND PRIX 2022",
@@ -112,5 +95,5 @@ drivers = (
 )
 
 # Export CSV for all races results
-# race_results(2022, race_names)
+race_results(2022, race_names)
 lap_results(2022, race_names)
