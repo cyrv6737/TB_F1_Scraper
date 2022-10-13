@@ -11,9 +11,9 @@ import glob
 fastf1.Cache.enable_cache("cache")
 
 # Takes Session.results
-def format_race_table(race, raceNum) :
+def format_race_table(race, race_num) :
     race.drop(labels = ["FullName", "Abbreviation", "BroadcastName", "Q1", "Q2", "Q3", "TeamColor"], axis = 1, inplace = True)
-    race.insert(loc = 0, column = 'raceID', value = raceNum)
+    race.insert(loc = 0, column = 'raceID', value = race_num)
 
 def race_results(year, names) :
     i = 0
@@ -30,18 +30,24 @@ def race_results(year, names) :
     df.to_csv('csv/tables/results.csv', sep=',', encoding='utf-8', index=False)
 
 
-def format_lap_tables(laps) :
-    laps.dop(labels = [], axis = 1, inplace = True)
+def format_lap_tables(laps, race_num) :
+    laps.drop(labels = ["LapNumber", "Sector1SessionTime", "Sector2SessionTime", "Sector3SessionTime", "SpeedI1", "SpeedI2", "SpeedFL", "SpeedST", "IsPersonalBest", "TyreLife", "FreshTyre", "Stint", "LapStartTime", "Team", "Driver", "TrackStatus", "IsAccurate", "LapStartDate" ], axis = 1, inplace = True)
+    laps.insert(loc = 0, column = 'raceID', value = race_num)
 
 def lap_results(year, names) :
     i = 0
     for race_name in names:
         temp_race = fastf1.get_session(year, race_name, 'R'); temp_race.load()
         temp_laps = temp_race.laps
-        # format_lap_tables(temp_laps)
-        csv_name = 'csv/R' + str(i + 1) + '_Lap_Results.csv'
+        format_lap_tables(temp_laps, (i + 1))
+        csv_name = 'csv/laps/R' + str(i + 1) + '_Lap_Results.csv'
         temp_laps.to_csv(csv_name, sep=',', encoding='utf-8', index=False) # Ensure utf-8 encoding for compat
         i = i + 1
+
+    results = os.path.join("csv/laps/", "R*.csv")
+    results = glob.glob(results)
+    df = pd.concat(map(pd.read_csv, results), ignore_index = True)
+    df.to_csv('csv/tables/laps.csv', sep=',', encoding='utf-8', index=False)
 
 def format_driver_tables(table) :
     table.dop(labels = [], axis = 1, inplace = True)
@@ -106,4 +112,5 @@ drivers = (
 )
 
 # Export CSV for all races results
-race_results(2022, race_names)
+# race_results(2022, race_names)
+lap_results(2022, race_names)
