@@ -3,22 +3,32 @@
 # https://github.com/theOehrly/Fast-F1
 
 import fastf1
+import pandas as pd
+import os
+import glob
 
 # Enable caching so its not slow as hell
 fastf1.Cache.enable_cache("cache")
 
 # Takes Session.results
-def format_race_table(race) :
+def format_race_table(race, raceNum) :
     race.drop(labels = ["FullName", "BroadcastName", "Q1", "Q2", "Q3", "TeamColor"], axis = 1, inplace = True)
+    race.insert(loc = 0, column = 'raceID', value = raceNum)
 
 def race_results(year, names) :
     i = 0
     for race_name in names:
         temp_race = fastf1.get_session(year, race_name, 'R'); temp_race.load()
-        format_race_table(temp_race.results)
-        csv_name = 'csv/R' + str(i + 1) + '_Race_Results.csv'
+        format_race_table(temp_race.results, (i + 1))
+        csv_name = 'csv/results/R' + str(i + 1) + '_Race_Results.csv'
         temp_race.results.to_csv(csv_name, sep=',', encoding='utf-8', index=False) # Ensure utf-8 encoding for compat
         i = i + 1
+
+    results = os.path.join("csv/results/", "R*.csv")
+    results = glob.glob(results)
+    df = pd.concat(map(pd.read_csv, results), ignore_index = True)
+    df.to_csv('csv/tables/results.csv', sep=',', encoding='utf-8', index=False)
+
 
 def format_lap_tables(laps) :
     laps.dop(labels = [], axis = 1, inplace = True)
@@ -97,5 +107,3 @@ drivers = (
 
 # Export CSV for all races results
 race_results(2022, race_names)
-lap_results(2022, race_names)
-# lap_results_by_driver(2022, race_names, drivers)
