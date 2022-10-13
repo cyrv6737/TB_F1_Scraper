@@ -12,7 +12,7 @@ fastf1.Cache.enable_cache("cache")
 
 # Takes Session.results
 def format_race_table(race, raceNum) :
-    race.drop(labels = ["FullName", "BroadcastName", "Q1", "Q2", "Q3", "TeamColor"], axis = 1, inplace = True)
+    race.drop(labels = ["FullName", "Abbreviation", "BroadcastName", "Q1", "Q2", "Q3", "TeamColor"], axis = 1, inplace = True)
     race.insert(loc = 0, column = 'raceID', value = raceNum)
 
 def race_results(year, names) :
