@@ -6,9 +6,15 @@ import fastf1
 import pandas as pd
 import os
 import glob
+from pathlib import Path
 
 # Enable caching so its not slow as hell
 fastf1.Cache.enable_cache("cache")
+
+# create paths
+Path("csv/laps").mkdir(parents = True, exist_ok = True)
+Path("csv/results").mkdir(parents = True, exist_ok = True)
+Path("csv/tables").mkdir(parents = True, exist_ok = True)
 
 # Takes Session.results
 def format_race_table(race, race_num) :
