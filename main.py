@@ -114,7 +114,7 @@ def get_drivers():
     race = pd.read_csv("csv/tables/RaceResults.csv", usecols = ['DriverNumber', 'FirstName', 'LastName', 'TeamName'])
     csv_list = [practice, qualifier, race]
     drivers = pd.concat(csv_list)
-    drivers.drop_duplicates(keep = False, inplace = False)
+    drivers.drop_duplicates(subset = None, inplace = True)
     drivers.to_csv("csv/tables/Drivers.csv", sep=',', encoding='utf-8', index=False)
 
 # All race names for this season
