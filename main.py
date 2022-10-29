@@ -107,6 +107,16 @@ def get_practice_results(events):
     df = pd.concat(map(pd.read_csv, qual_table))
     df.to_csv("csv/tables/FP_Results.csv", sep=',', encoding='utf-8', index=False)
 
+
+def get_drivers():
+    practice = pd.read_csv("csv/tables/FP_Results.csv", usecols = ['DriverNumber', 'FirstName', 'LastName', 'TeamName'])
+    qualifier = pd.read_csv("csv/tables/QualifierResults.csv", usecols = ['DriverNumber', 'FirstName', 'LastName', 'TeamName'])
+    race = pd.read_csv("csv/tables/RaceResults.csv", usecols = ['DriverNumber', 'FirstName', 'LastName', 'TeamName'])
+    csv_list = [practice, qualifier, race]
+    drivers = pd.concat(csv_list)
+    drivers.drop_duplicates(keep = False, inplace = False)
+    drivers.to_csv("csv/tables/Drivers.csv", sep=',', encoding='utf-8', index=False)
+
 # All race names for this season
 race_names = (
     "FORMULA 1 GULF AIR BAHRAIN GRAND PRIX 2022",
@@ -126,11 +136,12 @@ race_names = (
     "FORMULA 1 HEINEKEN DUTCH GRAND PRIX 2022",
     "FORMULA 1 PIRELLI GRAN PREMIO D’ITALIA 2022",
     "FORMULA 1 SINGAPORE AIRLINES SINGAPORE GRAND PRIX 2022",
-    "FORMULA 1 HONDA JAPANESE GRAND PRIX 2022"
+    "FORMULA 1 HONDA JAPANESE GRAND PRIX 2022",
     "FORMULA 1 ARAMCO UNITED STATES GRAND PRIX 2022"
 )
 
 # Export CSV for all races results
-get_race_results(race_names)
-get_qualifier_results(race_names)
-get_practice_results(race_names)
+#get_race_results(race_names)
+#get_qualifier_results(race_names)
+#get_practice_results(race_names)
+get_drivers()
