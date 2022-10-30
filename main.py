@@ -60,11 +60,11 @@ def get_practice_results(events):
     ifp1 = 0
     for fp1 in events:
         filename = "FP1_Data_" + str(fp1) + ".csv"
-        session = fastf1.get_session(2022, fp1, 'Q')
+        session = fastf1.get_session(2022, fp1, 'FP1')
         session.load()
 
         length = len(session.results.FullName)
-        results_artifact = session.results.iloc[0:length].loc[:, ['DriverNumber', 'FirstName', 'LastName', 'TeamName', 'Position', 'Time',]]
+        results_artifact = session.results.iloc[0:length].loc[:, ['DriverNumber', 'FirstName', 'LastName', 'TeamName', 'Time']]
         # print(session.results.iloc[0:20].loc[:, ['FullName', 'TeamName', 'Position', 'Time', 'Points', 'Status']])
         results_artifact.insert(loc = 1, column = 'raceID', value = ifp1)
         results_artifact.insert(loc = 1, column = 'Practice Session', value = '1')
@@ -75,11 +75,11 @@ def get_practice_results(events):
     ifp2 = 0
     for fp2 in events:
         filename = "FP2_Data_" + str(fp2) + ".csv"
-        session = fastf1.get_session(2022, fp2, 'Q')
+        session = fastf1.get_session(2022, fp2, 'FP2')
         session.load()
 
         length = len(session.results.FullName)
-        results_artifact = session.results.iloc[0:length].loc[:, ['DriverNumber', 'FirstName', 'LastName', 'TeamName', 'Position', 'Time',]]
+        results_artifact = session.results.iloc[0:length].loc[:, ['DriverNumber', 'FirstName', 'LastName', 'TeamName', 'Time']]
         # print(session.results.iloc[0:20].loc[:, ['FullName', 'TeamName', 'Position', 'Time', 'Points', 'Status']])
         results_artifact.insert(loc = 1, column = 'raceID', value = ifp2)
         results_artifact.insert(loc = 1, column = 'Practice Session', value = '2')
@@ -89,12 +89,18 @@ def get_practice_results(events):
 
     ifp3 = 0
     for fp3 in events:
+        # skip events without practice 3 to prevent crashing
+        if fp3 == "FORMULA 1 ROLEX GRAN PREMIO DEL MADE IN ITALY E DELL'EMILIA-ROMAGNA 2022":
+            continue
+        elif fp3 == "FORMULA 1 ROLEX GROSSER PREIS VON ÖSTERREICH 2022":
+            continue
+
         filename = "FP3_Data_" + str(fp3) + ".csv"
-        session = fastf1.get_session(2022, fp3, 'Q')
+        session = fastf1.get_session(2022, fp3, 'FP3')
         session.load()
 
         length = len(session.results.FullName)
-        results_artifact = session.results.iloc[0:length].loc[:, ['DriverNumber', 'FirstName', 'LastName', 'TeamName', 'Position', 'Time',]]
+        results_artifact = session.results.iloc[0:length].loc[:, ['DriverNumber', 'FirstName', 'LastName', 'TeamName', 'Time']]
         # print(session.results.iloc[0:20].loc[:, ['FullName', 'TeamName', 'Position', 'Time', 'Points', 'Status']])
         results_artifact.insert(loc = 1, column = 'raceID', value = ifp3)
         results_artifact.insert(loc = 1, column = 'Practice Session', value = '3')
@@ -102,9 +108,9 @@ def get_practice_results(events):
         df.to_csv("csv/results/" + filename, sep=',', encoding='utf-8', index=False)
         ifp3 = ifp3 + 1
 
-    qual_table = os.path.join("csv/results/", "FP*.csv")
-    qual_table = glob.glob(qual_table)
-    df = pd.concat(map(pd.read_csv, qual_table))
+    practice_table = os.path.join("csv/results/", "FP*.csv")
+    practice_table = glob.glob(practice_table)
+    df = pd.concat(map(pd.read_csv, practice_table))
     df.to_csv("csv/tables/FP_Results.csv", sep=',', encoding='utf-8', index=False)
 
 
@@ -143,5 +149,5 @@ race_names = (
 # Export CSV for all races results
 #get_race_results(race_names)
 #get_qualifier_results(race_names)
-#get_practice_results(race_names)
+get_practice_results(race_names)
 get_drivers()
