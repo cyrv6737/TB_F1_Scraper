@@ -180,11 +180,12 @@ race_names = (
     "FORMULA 1 PIRELLI GRAN PREMIO D’ITALIA 2022",
     "FORMULA 1 SINGAPORE AIRLINES SINGAPORE GRAND PRIX 2022",
     "FORMULA 1 HONDA JAPANESE GRAND PRIX 2022",
-    "FORMULA 1 ARAMCO UNITED STATES GRAND PRIX 2022"
+    "FORMULA 1 ARAMCO UNITED STATES GRAND PRIX 2022",
+    "FORMULA 1 GRAN PREMIO DE LA CIUDAD DE MÉXICO 2022"
 )
 
 # Export CSV for all races results
-#get_race_results(race_names)
-#get_qualifier_results(race_names)
-#get_practice_results(race_names)
+get_race_results(race_names)
+get_qualifier_results(race_names)
+get_practice_results(race_names)
 get_drivers()
