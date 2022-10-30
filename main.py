@@ -33,6 +33,7 @@ def get_race_results(events):
     race_table = os.path.join("csv/results/", "RaceData_*.csv")
     race_table = glob.glob(race_table)
     df = pd.concat(map(pd.read_csv, race_table))
+    df['Time'] = df['Time'].str.replace("0 days ", "")
     df.to_csv("csv/tables/RaceResults.csv", sep=',', encoding='utf-8', index=False)
 
 def get_qualifier_results(events):
@@ -53,6 +54,9 @@ def get_qualifier_results(events):
     qual_table = os.path.join("csv/results/", "QualifierData_*.csv")
     qual_table = glob.glob(qual_table)
     df = pd.concat(map(pd.read_csv, qual_table))
+    df['Q1'] = df['Q1'].str.replace("0 days ", "")
+    df['Q2'] = df['Q2'].str.replace("0 days ", "")
+    df['Q3'] = df['Q3'].str.replace("0 days ", "")
     df.to_csv("csv/tables/QualifierResults.csv", sep=',', encoding='utf-8', index=False)
 
 
@@ -89,6 +93,7 @@ def get_practice_results(events):
 
     ifp3 = 0
     for fp3 in events:
+        ifp3 = ifp3 + 1
         # skip events without practice 3 to prevent crashing
         if fp3 == "FORMULA 1 ROLEX GRAN PREMIO DEL MADE IN ITALY E DELL'EMILIA-ROMAGNA 2022":
             continue
@@ -102,11 +107,10 @@ def get_practice_results(events):
         length = len(session.results.FullName)
         results_artifact = session.results.iloc[0:length].loc[:, ['DriverNumber', 'FirstName', 'LastName', 'TeamName', 'Time']]
         # print(session.results.iloc[0:20].loc[:, ['FullName', 'TeamName', 'Position', 'Time', 'Points', 'Status']])
-        results_artifact.insert(loc = 1, column = 'raceID', value = ifp3)
+        results_artifact.insert(loc = 1, column = 'raceID', value = (ifp3 - 1))
         results_artifact.insert(loc = 1, column = 'Practice Session', value = '3')
         df = pd.DataFrame(results_artifact)
         df.to_csv("csv/results/" + filename, sep=',', encoding='utf-8', index=False)
-        ifp3 = ifp3 + 1
 
     practice_table = os.path.join("csv/results/", "FP*.csv")
     practice_table = glob.glob(practice_table)
@@ -147,7 +151,7 @@ race_names = (
 )
 
 # Export CSV for all races results
-#get_race_results(race_names)
-#get_qualifier_results(race_names)
-get_practice_results(race_names)
-get_drivers()
+get_race_results(race_names)
+get_qualifier_results(race_names)
+#get_practice_results(race_names)
+#get_drivers()
