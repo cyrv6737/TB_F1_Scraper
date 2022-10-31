@@ -167,15 +167,16 @@ def get_drivers():
 
 
 def create_events_table(events) :
-    table_dictionary = {"RoundNumber":[], "Name":[], "Country":[], "Location":[], "Date":[]}
+    table_dictionary = {"RoundNumber":[], "OfficialName":[], "Name":[], "Country":[], "Location":[], "EventDate":[]}
 
     for event in events:
         current_event = fastf1.get_event(2022, event)
         table_dictionary["RoundNumber"].append(current_event[0])
-        table_dictionary["Name"].append(current_event[3])
+        table_dictionary["OfficialName"].append(current_event[3])
+        table_dictionary["Name"].append(current_event[5])
         table_dictionary["Country"].append(current_event[1])
         table_dictionary["Location"].append(current_event[2])
-        table_dictionary["Date"].append(current_event[5])
+        table_dictionary["EventDate"].append(current_event[4])
 
     df = pd.DataFrame(data=table_dictionary)
     df.to_csv("csv/tables/Events.csv", sep=',', encoding='utf-8', index=False)
@@ -205,8 +206,8 @@ race_names = (
 )
 
 # Export CSV for all races results
-get_race_results(race_names)
-get_qualifier_results(race_names)
-get_practice_results(race_names)
-get_drivers()
+#get_race_results(race_names)
+#get_qualifier_results(race_names)
+#get_practice_results(race_names)
+#get_drivers()
 create_events_table(race_names)
