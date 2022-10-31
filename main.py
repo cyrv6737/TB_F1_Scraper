@@ -166,16 +166,19 @@ def get_drivers():
 
 
 def create_events_table(events) :
-    table_dictionary = {"RoundNumber":[], "OfficialName":[], "Name":[], "Country":[], "Location":[], "EventDate":[]}
+    table_dictionary = {"EventID":[], "RoundNumber":[], "OfficialName":[], "Name":[], "Country":[], "Location":[], "EventDate":[]}
 
+    ievent = 0
     for event in events:
         current_event = fastf1.get_event(2022, event)
+        table_dictionary["EventID"].append(ievent)
         table_dictionary["RoundNumber"].append(current_event[0])
         table_dictionary["OfficialName"].append(current_event[3])
         table_dictionary["Name"].append(current_event[5])
         table_dictionary["Country"].append(current_event[1])
         table_dictionary["Location"].append(current_event[2])
         table_dictionary["EventDate"].append(current_event[4])
+        ievent = ievent + 1
 
     df = pd.DataFrame(data=table_dictionary)
     df.to_csv("csv/tables/Events.csv", sep=',', encoding='utf-8', index=False)
