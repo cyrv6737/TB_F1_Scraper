@@ -6,7 +6,6 @@ import fastf1
 import pandas as pd
 import os
 import glob
-import re
 from pathlib import Path
 
 # Enable caching so its not slow as hell
