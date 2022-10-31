@@ -45,6 +45,7 @@ def get_race_results(events):
     df['TeamName'] = df['TeamName'].str.replace("AlphaTauri", "8")
     df['TeamName'] = df['TeamName'].str.replace("Williams", "9")
     df = df.rename(columns={'TeamName': 'ConstructorID'})
+    df = df.rename(columns={'Time': 'ResultTime'})
     df.to_csv("csv/tables/RaceResults.csv", sep=',', encoding='utf-8', index=False)
 
 def get_qualifier_results(events):
@@ -95,6 +96,7 @@ def get_practice_results(events):
         results_artifact.insert(loc = 1, column = 'raceID', value = ifp1)
         results_artifact.insert(loc = 1, column = 'Practice Session', value = '1')
         df = pd.DataFrame(results_artifact)
+        df = df.rename(columns={'Time': 'ResultTime'})
         df.to_csv("csv/results/" + filename, sep=',', encoding='utf-8', index=False)
         ifp1 = ifp1 + 1
 
@@ -110,6 +112,7 @@ def get_practice_results(events):
         results_artifact.insert(loc = 1, column = 'raceID', value = ifp2)
         results_artifact.insert(loc = 1, column = 'Practice Session', value = '2')
         df = pd.DataFrame(results_artifact)
+        df = df.rename(columns={'Time': 'ResultTime'})
         df.to_csv("csv/results/" + filename, sep=',', encoding='utf-8', index=False)
         ifp2 = ifp2 + 1
 
@@ -132,6 +135,7 @@ def get_practice_results(events):
         results_artifact.insert(loc = 1, column = 'raceID', value = (ifp3 - 1))
         results_artifact.insert(loc = 1, column = 'Practice Session', value = '3')
         df = pd.DataFrame(results_artifact)
+        df = df.rename(columns={'Time': 'ResultTime'})
         df.to_csv("csv/results/" + filename, sep=',', encoding='utf-8', index=False)
 
     practice_table = os.path.join("csv/results/", "FP*.csv")
