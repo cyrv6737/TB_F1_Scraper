@@ -6,6 +6,7 @@ import fastf1
 import pandas as pd
 import os
 import glob
+import re
 from pathlib import Path
 
 # Enable caching so its not slow as hell
@@ -94,7 +95,7 @@ def get_practice_results(events):
         results_artifact = session.results.iloc[0:length].loc[:, ['DriverNumber', 'FirstName', 'LastName', 'TeamName', 'Time']]
         # print(session.results.iloc[0:20].loc[:, ['FullName', 'TeamName', 'Position', 'Time', 'Points', 'Status']])
         results_artifact.insert(loc = 1, column = 'raceID', value = ifp1)
-        results_artifact.insert(loc = 1, column = 'Practice Session', value = '1')
+        results_artifact.insert(loc = 1, column = 'PracticeSession', value = '1')
         df = pd.DataFrame(results_artifact)
         df = df.rename(columns={'Time': 'ResultTime'})
         df.to_csv("csv/results/" + filename, sep=',', encoding='utf-8', index=False)
@@ -164,6 +165,21 @@ def get_drivers():
     drivers.drop_duplicates(subset = None, inplace = True)
     drivers.to_csv("csv/tables/Drivers.csv", sep=',', encoding='utf-8', index=False)
 
+
+def create_events_table(events) :
+    table_dictionary = {"RoundNumber":[], "Name":[], "Country":[], "Location":[], "Date":[]}
+
+    for event in events:
+        current_event = fastf1.get_event(2022, event)
+        table_dictionary["RoundNumber"].append(current_event[0])
+        table_dictionary["Name"].append(current_event[3])
+        table_dictionary["Country"].append(current_event[1])
+        table_dictionary["Location"].append(current_event[2])
+        table_dictionary["Date"].append(current_event[5])
+
+    df = pd.DataFrame(data=table_dictionary)
+    df.to_csv("csv/tables/Events.csv", sep=',', encoding='utf-8', index=False)
+
 # All race names for this season
 race_names = (
     "FORMULA 1 GULF AIR BAHRAIN GRAND PRIX 2022",
@@ -193,3 +209,4 @@ get_race_results(race_names)
 get_qualifier_results(race_names)
 get_practice_results(race_names)
 get_drivers()
+create_events_table(race_names)
